@@ -7,16 +7,15 @@ using System.Web;
 
 namespace labbigschool.Models
 {
-    public class Attendance
+    public class Following
     {
-        public Course Course { get; set; }
         [Key]
         [Column(Order = 1)]
-        public int CourseId { get; set; }
-        public ApplicationUser Attendee { get; set; }
+        public string FollowerId { get; set; }
         [Key]
         [Column(Order = 2)]
-        public string AttendeeId { get; set; }
+        public string FolloweeId { get; set; }
+        public ApplicationUser Follwer { get; set; }
+        public ApplicationUser Follwee { get; set; }
     }
-
 }

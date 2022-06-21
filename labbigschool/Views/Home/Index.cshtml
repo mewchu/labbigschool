@@ -1,15 +1,71 @@
-﻿@model IEnumrable<BigSchool.Models.Course>
+﻿@model IEnumerable<labbigschool.Models.Course>
 @{
     ViewBag.Title = "Home Page";
 }
+
+
+<ul class="course">
+    @foreach (var course in Model)
+    {
+        <li>
+            <div class="date">
+                <div class="month">
+                    @course.DateTime.ToString("MM")
+                </div>
+                <div class="day">
+                    @course.DateTime.ToString("dd")
+                </div>
+            </div>
+            <div class="details">
+                <span class="lecturer">
+                    @course.Lecturer.Name
+                </span>
+                <span class="category">
+                    @course.Category.Name
+                </span>
+                <button data-course-id="@course.Id" class="btn btn-default btn-sm js-toggle-attendance">Going?</button>
+            </div>
+        </li>
+    }
+</ul>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $(".js-toggle-attendances").click(function  (e) {
+                var button = $(e.target);
+                $.post("/api/attendances", { courseId: button.attr("data-course-id") })
+                    .done(function () {
+                        button
+                            .removeClass("btn-default")
+                            .addClass("btn-info")
+                            .text("Going");
+                    })
+                    .fail(function () {
+                        alert("Something failed!");
+                    });
+            });
+            $(".js-toggle-attendances").click(function (e) {
+                var button = $(e.target);
+                $.post("/api/follwings", { follweeId: button.attr("data-user-id") })
+                    .done(function () {
+                        button.text("Following");
+                    })
+                    .fail(function () {
+                        alert("Something failed");
+                    });
+            });
+        });
+    </script>
+    }
 <div class="row">
     <ul>
         @foreach (var course in Model)
-            {
-                <li>
-                    @course.DateTime - @course.Lecturer.Name
-                </li>
-            }
+        {
+            <li>
+                @course.DateTime - @course.Lecturer.Name
+            </li>
+        }
     </ul>
 </div>
 
@@ -40,26 +96,3 @@
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>
-<ul class="course">
-    @foreach (var course in Model)
-            {
-                <li>
-                    <div class="date">
-                        <div class="month">
-                            @course.DateTime.ToString("MM")
-                        </div>
-                        <div class="day">
-                            @course.DateTime.ToString("dd")
-                        </div>
-                    </div>
-                    <div class="details">
-                        <span class="lecturer">
-                            @course.Lecturer.Name
-                        </span>
-                        <span class="category">
-                            @course.Category.Name
-                        </span>
-                    </div>
-                </li>
-            }
-</ul>
